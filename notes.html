@@ -6,10 +6,10 @@
   <title>Notes & Resources - Shiva Raj Luitel</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <!-- Firebase SDK -->
+  
+  <!-- Firebase SDK v10 -->
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
 
@@ -18,83 +18,87 @@
     <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
       <h1 class="text-2xl font-bold text-blue-600">Shiva Raj Luitel</h1>
       <div class="flex gap-8 text-lg">
-        <a href="index.html" class="hover:text-blue-600">Home</a>
-        <a href="about.html" class="hover:text-blue-600">About</a>
-        <a href="projects.html" class="hover:text-blue-600">Projects</a>
-        <a href="experience.html" class="hover:text-blue-600">Experience</a>
-        <a href="notes.html" class="hover:text-blue-600 font-medium">Notes</a>
-        <a href="blog.html" class="hover:text-blue-600">Blog</a>
-        <a href="contact.html" class="hover:text-blue-600">Contact</a>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="projects.html">Projects</a>
+        <a href="experience.html">Experience</a>
+        <a href="notes.html" class="font-medium text-blue-600">Notes</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Contact</a>
       </div>
     </div>
   </nav>
 
   <div class="max-w-6xl mx-auto px-6 py-16">
     <h1 class="text-4xl font-bold mb-4">Notes & Resources</h1>
-    <p class="text-xl text-gray-600 dark:text-gray-400 mb-12">Live notes uploaded from backend</p>
+    <p class="text-gray-600 mb-12">Dynamically loaded from Firebase</p>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="notes-grid">
-      <!-- Notes will load here automatically -->
+    <div id="notes-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Notes will appear here automatically -->
     </div>
   </div>
 
   <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyDBjDgURh-uEh5knW4IS2kfBXcNuo4jHsA",
-  authDomain: "shivaraj-notes.firebaseapp.com",
-  projectId: "shivaraj-notes",
-  storageBucket: "shivaraj-notes.firebasestorage.app",
-  messagingSenderId: "970146808139",
-  appId: "1:970146808139:web:121fa2c1cbb71091d7e8ce",
-  measurementId: "G-0QM5W476P9"
-};
+    // ================== PASTE YOUR CONFIG HERE ==================
+    const firebaseConfig = {
+      apiKey: "AIzaSyxxxxxxxxxxxxxxxxxxxxxxxx",
+      authDomain: "your-project.firebaseapp.com",
+      projectId: "your-project-id",
+      storageBucket: "your-project.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:xxxxxxxxxxxxxxxx"
+    };
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const storage = firebase.storage();
 
-    // Load Notes
+    // Load Notes from Firebase
     async function loadNotes() {
       const grid = document.getElementById('notes-grid');
-      grid.innerHTML = '<p class="col-span-3 text-center py-10">Loading notes...</p>';
+      grid.innerHTML = `<p class="col-span-3 text-center py-12 text-gray-500">Loading notes...</p>`;
 
       try {
-        const snapshot = await db.collection('notes').orderBy('createdAt', 'desc').get();
-        
+        const snapshot = await db.collection("notes")
+                                .orderBy("createdAt", "desc")
+                                .get();
+
         if (snapshot.empty) {
-          grid.innerHTML = '<p class="col-span-3 text-center py-10 text-gray-500">No notes uploaded yet.</p>';
+          grid.innerHTML = `<p class="col-span-3 text-center py-12">No notes available yet.</p>`;
           return;
         }
 
-        grid.innerHTML = '';
-        snapshot.forEach(doc => {
+        grid.innerHTML = "";
+
+        snapshot.forEach((doc) => {
           const note = doc.data();
-          const card = `
-            <div class="bg-white dark:bg-gray-900 rounded-3xl shadow hover:shadow-xl p-8 transition">
+          
+          const cardHTML = `
+            <div class="bg-white dark:bg-gray-900 rounded-3xl shadow hover:shadow-xl p-8 transition-all">
               <div class="flex items-center gap-4 mb-6">
                 <i class="fas fa-file-pdf text-4xl text-red-500"></i>
                 <div>
                   <h3 class="font-semibold text-xl">${note.title}</h3>
-                  <p class="text-sm text-gray-500">${note.subject || 'Lecture Note'}</p>
+                  <p class="text-sm text-gray-500">${note.subject || ''}</p>
                 </div>
               </div>
-              <p class="text-gray-600 dark:text-gray-400 mb-6 line-clamp-3">${note.description}</p>
+              <p class="text-gray-600 dark:text-gray-400 mb-8 line-clamp-3">${note.description}</p>
               <a href="${note.fileUrl}" target="_blank" 
-                 class="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-2xl hover:bg-blue-700">
+                 class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl transition">
                 <i class="fas fa-download"></i> Download PDF
               </a>
             </div>
           `;
-          grid.innerHTML += card;
+          grid.innerHTML += cardHTML;
         });
+
       } catch (error) {
-        console.error(error);
-        grid.innerHTML = '<p class="text-red-500">Error loading notes.</p>';
+        console.error("Error loading notes:", error);
+        grid.innerHTML = `<p class="text-red-500 text-center py-12">Failed to load notes. Please try again.</p>`;
       }
     }
 
-    // Load notes when page opens
+    // Run when page loads
     window.onload = loadNotes;
   </script>
 </body>
