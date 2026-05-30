@@ -25,23 +25,38 @@
     </div>
   </nav>
 
-  <div class="max-w-6xl mx-auto px-6 py-16">
-    <h1 class="text-4xl font-bold mb-12">Featured Projects</h1>
-    <div class="grid md:grid-cols-2 gap-8">
-      <!-- Add your real projects here -->
-      <div class="bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow hover:shadow-xl">
-        <div class="h-56 bg-gray-200 flex items-center justify-center">Project Image</div>
-        <div class="p-8">
-         <a href="https://www.nepjol.info/index.php/jhcoe/article/view/91579" target="_blank">
-  <h3 class="font-semibold text-xl">
-    Augmented Reality Circuit Simulator for Interactive Learning
-  </h3>
-</a>
-          <p class="text-gray-600 mt-2">In electronics education, students frequently encounter difficulties bridging theoretical concepts from textbooks to practical applications, exacerbated by limitations in traditional lectures, static simulations, and resource-intensive physical labs (Bravo et al., 2021). This study introduces an Augmented Reality (AR) Circuit Simulator designed to enhance interactive learning by overlaying 3D virtual components onto real-world environments via mobile devices. The methodology integrates Unity 3D for AR rendering with ARCore for camera-based tracking, and Roboflow for detecting hand-drawn circuit elements. Users can manually place and connect components like batteries and resistors or import sketches, enabling real-time simulation of DC circuits using algorithms based on Ohm’s Law and Kirchhoff’s Laws. Quantitative evaluation of the prototype demonstrated 99% accuracy in simulating basic configurations, such as a 5V battery with a 100Ω resistor yielding 0.05A current, and series-parallel networks. Image recognition achieved 54.3% precision, identifying components reliably in clean sketches but requiring dataset expansion for robustness. This tool supports five core components (battery, resistor, wire, multimeter, nodes) and visualizes current flow through particle animations, outperforming conventional 2D tools in engagement by providing tangible, immediate feedback. The system promotes deeper conceptual understanding, particularly for visual learners, and paves the way for expansions to AC components and user progress tracking. Keywords: Augmented Reality, Circuit Simulation, Unity 3D, ARCore, Image Detection, Electronics Education, Interactive Learning</p>
-        </div>
-      </div>
-      <!-- Duplicate and edit for more projects -->
-    </div>
+ <div class="bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow hover:shadow-xl transition">
+
+  <!-- IMAGE -->
+  <img src="images/Figure5.jpg"
+       alt="AR Circuit Simulator"
+       class="w-full h-56 object-cover">
+
+  <!-- CONTENT -->
+  <div class="p-8">
+
+    <!-- TITLE + LINK -->
+    <a href="https://www.nepjol.info/index.php/jhcoe/article/view/91579"
+       target="_blank"
+       class="block">
+
+      <h3 class="font-semibold text-xl hover:text-blue-600 transition">
+        Augmented Reality Circuit Simulator for Interactive Learning
+      </h3>
+    </a>
+
+    <!-- SHORT DESCRIPTION (IMPORTANT FIX) -->
+    <p class="text-gray-600 dark:text-gray-300 mt-3 text-sm leading-relaxed">
+      An Augmented Reality-based circuit simulation system developed using Unity 3D and ARCore.
+      It enables interactive visualization of electrical circuits and improves conceptual learning in electronics education.
+    </p>
+
+    <!-- OPTIONAL BUTTON -->
+    <a href="https://www.nepjol.info/index.php/jhcoe/article/view/91579"
+       target="_blank"
+       class="inline-block mt-4 text-blue-600 hover:underline">
+      View Paper →
+    </a>
+
   </div>
-</body>
-</html>
+</div>
