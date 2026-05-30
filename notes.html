@@ -3,103 +3,116 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notes & Resources - Shiva Raj Luitel</title>
+
+  <title>Notes - Shiva Raj Luitel</title>
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  
-  <!-- Firebase SDK v10 -->
+
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-</head>
-<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
-
-  <!-- Navbar -->
-  <nav class="bg-white dark:bg-gray-900 border-b sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-blue-600">Shiva Raj Luitel</h1>
-      <div class="flex gap-8 text-lg">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="projects.html">Projects</a>
-        <a href="experience.html">Experience</a>
-        <a href="notes.html" class="font-medium text-blue-600">Notes</a>
-        <a href="blog.html">Blog</a>
-        <a href="contact.html">Contact</a>
-      </div>
-    </div>
-  </nav>
-
-  <div class="max-w-6xl mx-auto px-6 py-16">
-    <h1 class="text-4xl font-bold mb-4">Notes & Resources</h1>
-    <p class="text-gray-600 mb-12">Dynamically loaded from Firebase</p>
-
-    <div id="notes-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Notes will appear here automatically -->
-    </div>
-  </div>
 
   <script>
-    // ================== PASTE YOUR CONFIG HERE ==================
-    const firebaseConfig = {
-      apiKey: "AIzaSyxxxxxxxxxxxxxxxxxxxxxxxx",
-      authDomain: "your-project.firebaseapp.com",
-      projectId: "your-project-id",
-      storageBucket: "your-project.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:xxxxxxxxxxxxxxxx"
-    };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    // Load Notes from Firebase
-    async function loadNotes() {
-      const grid = document.getElementById('notes-grid');
-      grid.innerHTML = `<p class="col-span-3 text-center py-12 text-gray-500">Loading notes...</p>`;
-
-      try {
-        const snapshot = await db.collection("notes")
-                                .orderBy("createdAt", "desc")
-                                .get();
-
-        if (snapshot.empty) {
-          grid.innerHTML = `<p class="col-span-3 text-center py-12">No notes available yet.</p>`;
-          return;
-        }
-
-        grid.innerHTML = "";
-
-        snapshot.forEach((doc) => {
-          const note = doc.data();
-          
-          const cardHTML = `
-            <div class="bg-white dark:bg-gray-900 rounded-3xl shadow hover:shadow-xl p-8 transition-all">
-              <div class="flex items-center gap-4 mb-6">
-                <i class="fas fa-file-pdf text-4xl text-red-500"></i>
-                <div>
-                  <h3 class="font-semibold text-xl">${note.title}</h3>
-                  <p class="text-sm text-gray-500">${note.subject || ''}</p>
-                </div>
-              </div>
-              <p class="text-gray-600 dark:text-gray-400 mb-8 line-clamp-3">${note.description}</p>
-              <a href="${note.fileUrl}" target="_blank" 
-                 class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl transition">
-                <i class="fas fa-download"></i> Download PDF
-              </a>
-            </div>
-          `;
-          grid.innerHTML += cardHTML;
-        });
-
-      } catch (error) {
-        console.error("Error loading notes:", error);
-        grid.innerHTML = `<p class="text-red-500 text-center py-12">Failed to load notes. Please try again.</p>`;
-      }
+    tailwind.config = {
+      darkMode: 'class'
     }
-
-    // Run when page loads
-    window.onload = loadNotes;
   </script>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+
+<!-- NAVBAR -->
+<nav class="bg-white dark:bg-gray-900 border-b">
+  <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between">
+    <h1 class="text-xl font-bold text-blue-600">Shiva Raj Luitel</h1>
+    <div class="flex gap-6">
+      <a href="index.html">Home</a>
+      <a href="notes.html" class="text-blue-600 font-semibold">Notes</a>
+    </div>
+  </div>
+</nav>
+
+<!-- CONTENT -->
+<div class="max-w-6xl mx-auto px-6 py-12">
+
+  <h1 class="text-4xl font-bold mb-2">Notes & Resources</h1>
+  <p class="text-gray-500 mb-10">Loaded from Firebase Firestore</p>
+
+  <div id="notes-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+</div>
+
+<!-- FIREBASE + LOGIC -->
+<script>
+  // 🔥 STEP 1: Firebase Config (PASTE YOUR VALUES HERE)
+ // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBfZ4eEoh0AhYYqvnd_p0c5KwhE4I7OsYs",
+  authDomain: "notes-d0771.firebaseapp.com",
+  projectId: "notes-d0771",
+  storageBucket: "notes-d0771.firebasestorage.app",
+  messagingSenderId: "927233194456",
+  appId: "1:927233194456:web:8601505c3dfacf416fdaad"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+  // 🔥 STEP 2: Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  const grid = document.getElementById("notes-grid");
+
+  // 🔥 STEP 3: Load Notes
+  function loadNotes() {
+
+    grid.innerHTML = `<p class="text-center col-span-3 text-gray-500">Loading notes...</p>`;
+
+    db.collection("notes").get().then(snapshot => {
+
+      grid.innerHTML = "";
+
+      if (snapshot.empty) {
+        grid.innerHTML = `<p class="text-center col-span-3">No notes found</p>`;
+        return;
+      }
+
+      snapshot.forEach(doc => {
+        const note = doc.data();
+
+        grid.innerHTML += `
+          <div class="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow hover:shadow-xl transition">
+
+            <h3 class="text-xl font-bold mb-2">${note.title}</h3>
+
+            <p class="text-sm text-gray-500 mb-4">
+              ${note.category || ''}
+            </p>
+
+            <a href="${note.file}" target="_blank"
+               class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+              Download PDF
+            </a>
+
+          </div>
+        `;
+      });
+
+    }).catch(error => {
+      console.error(error);
+      grid.innerHTML = `<p class="text-red-500">Error loading notes</p>`;
+    });
+  }
+
+  loadNotes();
+</script>
+
 </body>
 </html>
