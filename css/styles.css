@@ -1,4 +1,9 @@
-```css
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(180deg, #0b1f3a 0%, #08172c 100%);
+  color: #e5e7eb;
+}
 .btn{
   display:inline-block;
   margin-top:20px;
